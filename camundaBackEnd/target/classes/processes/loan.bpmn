@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0znt5nm" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
+  <bpmn:message id="Message_160fj42" name="Besoin d&#39;information" />
+  <bpmn:message id="Message_1u8ip1o" name="envoieReclamation" />
+  <bpmn:process id="reclamCredit" isExecutable="true" camunda:historyTimeToLive="1000">
+    <bpmn:userTask id="TraitementCRC" name="CRC : Traiter reclamation credit" camunda:assignee="CRC">
+      <bpmn:incoming>Flow_0b1bgoy</bpmn:incoming>
+      <bpmn:incoming>Flow_0wdegc1</bpmn:incoming>
+      <bpmn:incoming>Flow_0znzb3n</bpmn:incoming>
+      <bpmn:incoming>Flow_1i8bg6l</bpmn:incoming>
+      <bpmn:outgoing>Flow_0kyd3z1</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Modification" name="Modification de la demande reclamation credit" camunda:assignee="AGENCE">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_1dnlc1n</bpmn:incoming>
+      <bpmn:outgoing>Flow_0b1bgoy</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0b1bgoy" sourceRef="Modification" targetRef="TraitementCRC" />
+    <bpmn:endEvent id="Event_06ljfjc">
+      <bpmn:incoming>Flow_15ktd3r</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="Event_0kya2mu">
+      <bpmn:incoming>Flow_11ie9t4</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_11ie9t4" sourceRef="Rejet" targetRef="Event_0kya2mu" />
+    <bpmn:sequenceFlow id="Flow_15ktd3r" sourceRef="Cloture" targetRef="Event_06ljfjc" />
+    <bpmn:sequenceFlow id="Flow_0wdegc1" sourceRef="TraitementBO" targetRef="TraitementCRC">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${idEtape==14}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1lwv53b" sourceRef="TraitementBO" targetRef="TraitementBO">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${idEtape==17}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_1yhtu7w">
+      <bpmn:incoming>Flow_0kyd3z1</bpmn:incoming>
+      <bpmn:outgoing>Flow_0znzb3n</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1bijgfd</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1x3rscl</bpmn:outgoing>
+      <bpmn:outgoing>Flow_01itz3c</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1dy2av4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0znzb3n" sourceRef="Gateway_1yhtu7w" targetRef="TraitementCRC">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${idEtape==14}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1bijgfd" sourceRef="Gateway_1yhtu7w" targetRef="TraitementBO">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${idEtape==16}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1x3rscl" sourceRef="Gateway_1yhtu7w" targetRef="Retour">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${idEtape==15}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_01itz3c" sourceRef="Gateway_1yhtu7w" targetRef="Rejet">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${idEtape==18}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1dy2av4" sourceRef="Gateway_1yhtu7w" targetRef="Cloture">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${idEtape==17}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0kyd3z1" sourceRef="TraitementCRC" targetRef="Gateway_1yhtu7w" />
+    <bpmn:startEvent id="Event_0dw4yix" name="Envoyer reclamation credit vers siege&#10;">
+      <bpmn:extensionElements />
+      <bpmn:outgoing>Flow_1i8bg6l</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1i8bg6l" sourceRef="Event_0dw4yix" targetRef="TraitementCRC" />
+    <bpmn:userTask id="TraitementBO" name="Back office : Traiter reclamation credit" camunda:assignee="BACK_OFFICE">
+      <bpmn:incoming>Flow_1lwv53b</bpmn:incoming>
+      <bpmn:incoming>Flow_1bijgfd</bpmn:incoming>
+      <bpmn:outgoing>Flow_0wdegc1</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1lwv53b</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Cloture" name="Cloturer la reclamation" camunda:delegateExpression="${clotureHandler}">
+      <bpmn:incoming>Flow_1dy2av4</bpmn:incoming>
+      <bpmn:outgoing>Flow_15ktd3r</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Rejet" name="Rejeter reclamation credit" camunda:delegateExpression="${rejetHandler}">
+      <bpmn:incoming>Flow_01itz3c</bpmn:incoming>
+      <bpmn:outgoing>Flow_11ie9t4</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1dnlc1n" sourceRef="Retour" targetRef="Modification" />
+    <bpmn:serviceTask id="Retour" name="Retourner reclamation pour besoin d&#39;information" camunda:delegateExpression="${retournerDemande}">
+      <bpmn:incoming>Flow_1x3rscl</bpmn:incoming>
+      <bpmn:outgoing>Flow_1dnlc1n</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="reclamCredit">
+      <bpmndi:BPMNShape id="Activity_1haa5oh_di" bpmnElement="TraitementCRC">
+        <dc:Bounds x="300" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_06ljfjc_di" bpmnElement="Event_06ljfjc">
+        <dc:Bounds x="1012" y="372" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0kya2mu_di" bpmnElement="Event_0kya2mu">
+        <dc:Bounds x="1014" y="482" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1yhtu7w_di" bpmnElement="Gateway_1yhtu7w" isMarkerVisible="true">
+        <dc:Bounds x="455" y="365" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_02tdjpt_di" bpmnElement="TraitementBO">
+        <dc:Bounds x="700" y="150" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1iu7olz_di" bpmnElement="Modification">
+        <dc:Bounds x="620" y="750" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1sqyalr_di" bpmnElement="Event_0dw4yix">
+        <dc:Bounds x="182" y="782" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="157" y="825" width="88" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ue7kvn_di" bpmnElement="Cloture">
+        <dc:Bounds x="770" y="350" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0k8ey49_di" bpmnElement="Rejet">
+        <dc:Bounds x="770" y="460" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_019usak_di" bpmnElement="Retour">
+        <dc:Bounds x="770" y="600" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0b1bgoy_di" bpmnElement="Flow_0b1bgoy">
+        <di:waypoint x="720" y="790" />
+        <di:waypoint x="750" y="790" />
+        <di:waypoint x="750" y="870" />
+        <di:waypoint x="360" y="870" />
+        <di:waypoint x="360" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wdegc1_di" bpmnElement="Flow_0wdegc1">
+        <di:waypoint x="800" y="170" />
+        <di:waypoint x="940" y="170" />
+        <di:waypoint x="940" y="80" />
+        <di:waypoint x="340" y="80" />
+        <di:waypoint x="340" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0znzb3n_di" bpmnElement="Flow_0znzb3n">
+        <di:waypoint x="480" y="365" />
+        <di:waypoint x="480" y="320" />
+        <di:waypoint x="370" y="320" />
+        <di:waypoint x="370" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1i8bg6l_di" bpmnElement="Flow_1i8bg6l">
+        <di:waypoint x="218" y="800" />
+        <di:waypoint x="259" y="800" />
+        <di:waypoint x="259" y="390" />
+        <di:waypoint x="300" y="390" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kyd3z1_di" bpmnElement="Flow_0kyd3z1">
+        <di:waypoint x="400" y="390" />
+        <di:waypoint x="455" y="390" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1dnlc1n_di" bpmnElement="Flow_1dnlc1n">
+        <di:waypoint x="820" y="680" />
+        <di:waypoint x="820" y="720" />
+        <di:waypoint x="670" y="720" />
+        <di:waypoint x="670" y="750" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15ktd3r_di" bpmnElement="Flow_15ktd3r">
+        <di:waypoint x="870" y="390" />
+        <di:waypoint x="1012" y="390" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11ie9t4_di" bpmnElement="Flow_11ie9t4">
+        <di:waypoint x="870" y="500" />
+        <di:waypoint x="1014" y="500" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1x3rscl_di" bpmnElement="Flow_1x3rscl">
+        <di:waypoint x="480" y="415" />
+        <di:waypoint x="480" y="640" />
+        <di:waypoint x="770" y="640" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bijgfd_di" bpmnElement="Flow_1bijgfd">
+        <di:waypoint x="480" y="365" />
+        <di:waypoint x="480" y="190" />
+        <di:waypoint x="700" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01itz3c_di" bpmnElement="Flow_01itz3c">
+        <di:waypoint x="480" y="415" />
+        <di:waypoint x="480" y="500" />
+        <di:waypoint x="770" y="500" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1dy2av4_di" bpmnElement="Flow_1dy2av4">
+        <di:waypoint x="505" y="390" />
+        <di:waypoint x="770" y="390" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lwv53b_di" bpmnElement="Flow_1lwv53b">
+        <di:waypoint x="800" y="210" />
+        <di:waypoint x="940" y="210" />
+        <di:waypoint x="940" y="300" />
+        <di:waypoint x="750" y="300" />
+        <di:waypoint x="750" y="230" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
