@@ -27,8 +27,8 @@ This application is built to streamline and automate the credit reclamation proc
 ## Installation
 
 1. **Clone the Repository:**
-   git clone https://github.com/your-username/credit-reclamation-app.git
-   cd credit-reclamation-app
+  - git clone https://github.com/your-username/credit-reclamation-app.git
+  - cd credit-reclamation-app
 2. **Backend Setup:**
 - Configure your database settings in `application.properties`.
 - Build and run the Spring Boot application.
