@@ -22,7 +22,7 @@ This application is built to streamline and automate the credit reclamation proc
 - **Frontend**:
   - Angular: A powerful framework for building dynamic web applications.
   - Angular Material: UI components for a consistent and responsive user interface.
-  - Angular template : 
+  - Angular template : Sakai-NG https://www.primefaces.org/sakai-ng/#/documentation 
 
 ## Installation
 
